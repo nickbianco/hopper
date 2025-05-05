@@ -1,0 +1,10 @@
+hopper.osim
+hopper_states.sto
+
+models/
+path_fitting_results/
+runs/
+wandb/
+
+__pycache__/
+*.pyc
