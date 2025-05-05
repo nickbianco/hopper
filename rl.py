@@ -135,16 +135,6 @@ class HopperEnv(gym.Env):
 
     def _get_obs(self):
         return { "q": self._q[1:], "u": self._u }
-    
-    # def _get_reward(self, action):
-    #     reward = 0.0
-
-    #     error = self._q[0] - self._target_height
-    #     reward += 1.0 / (error * error)  # Reward for height
-    #     reward += -0.01 * np.sum(np.square(self._udot))  # Penalize large accelerations
-    #     reward += -0.01 * np.sum(np.square(action))  # Reward for minimizing action effort
-
-    #     return reward
 
 
 if __name__ == "__main__":
@@ -209,6 +199,4 @@ if __name__ == "__main__":
             
             if terminated or truncated:
                 break
-
-
 
