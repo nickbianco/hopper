@@ -6,5 +6,7 @@ path_fitting_results/
 runs/
 wandb/
 
+ppo_hopper.zip
+
 __pycache__/
 *.pyc
