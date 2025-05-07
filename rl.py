@@ -58,6 +58,9 @@ class HopperEnv(gym.Env):
         # Define the action space (e.g., the 'vastus' muscle excitation).
         self.action_space = spaces.Box(low=0.0, high=1.0, 
                                        shape=(1,), dtype=np.float32)
+        
+        # Perfomance benchmarking.
+        self.total_sim_time = 0.0
 
     def reset(self, seed=None, options=None):
         super().reset(seed=seed)
@@ -86,6 +89,7 @@ class HopperEnv(gym.Env):
         return observation, info
 
     def step(self, action):
+        sim_start = time()
 
         # Update the state.
         self._state.setTime(self._time)
@@ -124,6 +128,9 @@ class HopperEnv(gym.Env):
         # Update the time and step count.
         self._time += self._dt
         self._num_steps += 1
+
+        # Benchmarking.
+        self.total_sim_time += time() - sim_start
 
         # Get observations, rewards, termination status, and info.
         obs = self._get_obs()
@@ -171,7 +178,7 @@ if __name__ == "__main__":
                     verbose=1, 
                     tensorboard_log=f"runs/{run.id}")      
 
-        start_time = time()  
+        train_start = time()  
         model.learn(
             total_timesteps=config['total_timesteps'], 
             callback=WandbCallback(
@@ -180,8 +187,16 @@ if __name__ == "__main__":
                 verbose=2,
             )
         )
-        end_time = time()
-        print(f"Training completed in {end_time - start_time:.2f} seconds.")
+        train_end = time()
+
+        total_train_time = train_end - train_start
+        total_sim_time = wrapped_env.env.total_sim_time
+        other_time = total_train_time - total_sim_time
+
+        print(f"Total training time: {total_train_time:.2f} seconds")
+        print(f"OpenSim simulation time: {total_sim_time:.2f} seconds")
+        print(f"PPO + overhead time: {other_time:.2f} seconds")
+
         model.save("ppo_hopper")
         run.finish()
 
