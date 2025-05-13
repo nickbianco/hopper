@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<OpenSimDocument Version="40600">
+	<Set_FunctionBasedPath_>
+		<objects>
+			<FunctionBasedPath name="/forceset/vastus">
+				<!--The list of paths to the model coordinates that are used as arguments to the length, lengthening speed, and moment arm functions. You must provide a least one coordinate path, and the order of the paths must match the order of the arguments passed to `length_function` (and `moment_arm_functions` and `lengthening_speed_function`, if provided).-->
+				<coordinate_paths>/jointset/knee/kneeFlexion</coordinate_paths>
+				<!--(Required) The OpenSim::Function object that computes the length of the path as a function of the coordinate values. The function arguments must match the order in `coordinate_paths`.-->
+				<length_function>
+					<MultivariatePolynomialFunction>
+						<!--Coefficients of a multivariate polynomial function in order of ascending powers starting from the last independent component.-->
+						<coefficients>0.46390061692877532 0.080000000000000682 0 0 0 0</coefficients>
+						<!--Number of input dimensions (i.e., independent components).-->
+						<dimension>1</dimension>
+						<!--The largest sum of exponents in a single term.-->
+						<order>5</order>
+					</MultivariatePolynomialFunction>
+				</length_function>
+			</FunctionBasedPath>
+		</objects>
+		<groups />
+	</Set_FunctionBasedPath_>
+</OpenSimDocument>

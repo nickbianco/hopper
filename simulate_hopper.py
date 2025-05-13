@@ -22,16 +22,22 @@ if use_function_based_paths:
     vastus = hopper.getMuscles().get('vastus')
     path = osim.FunctionBasedPath.safeDownCast(vastus.getPath())
     lengthFunc = osim.MultivariatePolynomialFunction.safeDownCast(
-            path.getLengthFunction())
+            path.getLengthFunction()) 
+    
+    import pdb; pdb.set_trace()
     coeffs = lengthFunc.getCoefficients()
 
     # Moment arms are calculated as the partial derivative of the length function with 
     # respect to the dependent coordinates. Therefore, the moment arm function for the
-    # hopper is just a constant.
+    # hopper is just a constant value, negated based on OpenSim's sign convention for 
+    # moment arms. The lengthening speed function is the time derivative of the length
+    # function, which is the product of the moment arm and the generalized speed (with 
+    # another negative sign to account for the negation of the moment arm).
     print(f'\nFunction-based path information for the vastus muscle')
     print( '-----------------------------------------------------' )
-    print(f'Length function:     l(q) = {coeffs[0]:2f} + {coeffs[1]:2f}*q_knee')
-    print(f'Moment arm function: r(q) = dl/dq = {coeffs[1]:2f}')
+    print(f'Length function:             l(q) = {coeffs[0]:2f} + {coeffs[1]:2f}*q_knee')
+    print(f'Moment arm function:         r(q) = -dl/dq = -{coeffs[1]:2f}')
+    print(f'Lenghthening speed function: ldot(q) = dl/dt = -r(q)*qdot = {coeffs[1]:2f}*qdot_knee')
     print( '-----------------------------------------------------\n' )
 
 # Initialize the system and print the model to an XML file.
